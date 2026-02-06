@@ -1,127 +1,95 @@
-/* --- 1. 全局基础与重置 --- */
-* {
-    box-sizing: border-box; /* 确保 padding 不撑破布局 */
-}
-
+/* --- 基础样式 --- */
+* { box-sizing: border-box; }
 body {
     background-color: #0f172a;
     color: #e2e8f0;
     background-image: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
     margin: 0;
-    padding: 20px;
+    padding: 0; /* 移除 body padding 以便 header 居中 */
     font-family: 'Inter', sans-serif;
-    overflow-x: hidden; /* 防止手机端左右晃动 */
+    min-height: 100vh;
 }
 
-/* --- 2. 核心布局：自动适配容器 --- */
+/* Header 居中 */
+.main-header {
+    text-align: center;
+    padding: 40px 20px 20px;
+}
+.welcome-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+/* 布局容器 */
 .container {
     max-width: 1100px;
     margin: 0 auto;
     display: flex;
-    flex-wrap: wrap; /* 允许自动换行：手机上右栏会自动掉到左栏下面 */
-    gap: 25px;
+    flex-direction: row; /* 电脑端横排 */
+    flex-wrap: wrap; 
+    gap: 30px;
+    padding: 20px;
 }
 
-/* 统一左右栏的基础设置 */
-.left-column, .right-column {
-    flex: 1;
-    min-width: 320px; /* 关键：当屏幕窄于这个值，就会自动切换到垂直排列 */
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-}
+.left-column { flex: 1; min-width: 300px; }
+.right-column { flex: 1.8; min-width: 350px; }
 
-.right-column {
-    flex: 2; /* 电脑上右栏占 2 份宽度 */
-}
-
-/* --- 3. 卡片与视频：响应式高度 --- */
+/* 卡片基础 */
 .card {
     background: rgba(30, 41, 59, 0.7);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease;
+    padding: 20px;
+    margin-bottom: 25px;
 }
 
+/* 照片适配 */
+.photo-card-mini {
+    padding: 0;
+    overflow: hidden;
+    height: 350px;
+}
+.profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 视频响应式高度 */
 .video-card {
     position: relative;
+    padding: 0;
     background: #000;
-    border-radius: 20px;
-    overflow: hidden;
-    width: 100%;
-    /* 使用长宽比锁定高度，防止视频变形 */
-    aspect-ratio: 16 / 9; 
-    max-height: 450px;
+    aspect-ratio: 16 / 9;
+    max-height: 480px;
 }
-
 .project-video {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* 铺满容器 */
+    object-fit: contain;
 }
 
-/* --- 4. 修复 Hero Section 的位移问题 --- */
-/* 注意：不要使用大额负数 top，改用正常的 margin 调整 */
-.hero-text-section {
-    padding: 20px;
-    /* 建议微调这里的数值，不要让它“飞”得太高 */
-}
-
-.floating-name {
-    font-size: 2.2rem;
-    font-family: 'Itim', cursive;
-    background: linear-gradient(120deg, #a78bfa 0%, #f472b6 50%, #818cf8 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: shine 4s linear infinite;
-    background-size: 200% auto;
-}
-
-/* --- 5. 底栏小卡片：自动列数 --- */
+/* 底部三栏 */
 .bottom-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 自动计算列数 */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 15px;
 }
 
-.mini-card {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
-    padding: 18px;
-}
-
-/* --- 6. 移动端专属微调 --- */
+/* 手机端适配 */
 @media (max-width: 768px) {
     .container {
-        flex-direction: column; /* 强制垂直排列 */
-        margin: 10px auto;
+        flex-direction: column; /* 手机端竖排 */
     }
-
     .left-column, .right-column {
         width: 100%;
-        min-width: 100%;
     }
-
-    .photo-card-mini {
-        height: 300px; /* 手机上照片稍微收一点 */
-    }
-
-    .hero-text-section {
-        position: static; /* 手机上取消那种极端的位移，保证能看到文字 */
-        transform: none;
-        text-align: center;
-    }
-    
-    .typing-text {
-        font-size: 2rem !important; /* 缩小打字标题防止溢出 */
-    }
-
-    .video-card {
-        aspect-ratio: 16 / 9; /* 保证视频在手机上比例正确 */
-    }
+    .main-header { padding: 20px 10px; }
+    .floating-name { font-size: 1.8rem; text-align: center; }
+    .contact-group-clean { text-align: center; }
 }
 
-/* ... 保持你之前的 @keyframes 动画代码 (shine, blink, bloom等) ... */
+/* 之前你的动画代码放这里即可 (shine, blink等) */
