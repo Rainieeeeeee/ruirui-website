@@ -457,3 +457,54 @@ a:hover {
     0% { transform: translate(0, 0) rotate(0); opacity: 1; }
     100% { transform: translate(30px, 50px) rotate(360deg); opacity: 0; }
 }
+
+/* --- 1. 修复视频过高的问题 --- */
+.video-card {
+    height: 450px;       /* 给大屏幕设置一个合适的最大高度 */
+    overflow: hidden;
+}
+
+.project-video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* 改为 contain 确保视频比例不失真且完整显示 */
+    background: #000;    /* 视频背景填黑，防止白边难看 */
+}
+
+/* --- 2. 核心：适配手机端 (屏幕宽度小于 768px) --- */
+@media (max-width: 768px) {
+    /* 整个大容器由横向排列改为纵向排列 */
+    body {
+        padding: 15px; /* 手机端留点边距 */
+    }
+
+    /* 假设你的主容器叫 .container 或 .main-layout */
+    .container { 
+        flex-direction: column !important; 
+        display: block !important;
+    }
+
+    /* 左侧个人信息栏：手机上占满全宽 */
+    .sidebar, .left-panel {
+        width: 100% !important;
+        margin-bottom: 20px;
+        text-align: center; /* 头像和名字居中 */
+    }
+
+    /* 视频卡片：手机上高度调小 */
+    .video-card {
+        width: 100% !important;
+        height: 250px; 
+    }
+
+    /* 底部的三栏并排：在手机上变成一列一列地排 */
+    .bottom-grid {
+        flex-direction: column !important;
+        gap: 15px;
+    }
+
+    .mini-card {
+        width: 100%;
+        min-height: auto;
+    }
+}
