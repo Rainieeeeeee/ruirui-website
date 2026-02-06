@@ -50,13 +50,7 @@ body {
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
-
-    /* 核心修改：用 position 配合 top 来实现精准位移 */
-    position: relative;
-    top: -500px; /* 向上平移 120 像素，如果不够可以继续加大 */
     
-    /* 备选方案（如果 top 还不动，就用下面这一行） */
-    transform: translateY(-520px); 
     
     padding: 0;
     margin-bottom: -80px; /* 抵消位移产生的底部空白 */
@@ -319,90 +313,86 @@ a:hover {
     }
 }
 
-/* --- 1. Header 与 Welcome 动画 --- */
+/* --- Header + Welcome（最终稳定版） --- */
 .main-header {
-    padding: 10px 0 5px; /* 极简内边距，进一步压缩高度 */
-    text-align: center;
-    min-height: auto;
-    margin-bottom: 20px; /* 控制 Header 和下方内容的总间距 */
+  padding: 10px 0 5px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
+/* Welcome 容器：用相对定位做“文字压在光线” */
 .welcome-container {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px; /* 文字和花朵的间距稍微收紧 */
-    line-height: 1; /* 【核心】消除文字默认的上下留白 */
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  line-height: 1;
+  transform: translateX(60px);
 }
 
-.typing-text {
-    font-size: 2.2rem; /* 稍微缩小 Welcome，显得更精致 */
-    margin: 0;        /* 确保没有默认外边距 */
-    padding: 0;
-    line-height: 1.1;
-    /* ... 保持你之前的打字动画和渐变效果 ... */
+/* 光线：放在 Welcome 后面 */
+.welcome-container .header-line {
+  position: absolute;
+  left: -140px;
+  right: -180px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 4px;
+  background: linear-gradient(90deg, transparent, #6366f1, transparent);
+  z-index: 0;
+
+  animation: line-expand 1.6s ease-out forwards;
 }
 
-.flower-pop {
-    font-size: 2.2rem; /* 让花朵和文字一样大 */
-    line-height: 1;
-    /* ... 保持之前的绽放动画 ... */
+/* Welcome 字：在最上层，盖住光线 */
+.welcome-container .typing-text {
+  position: relative;
+  z-index: 1;
+  font-family: 'Itim', cursive;
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin: 0;
+  padding: 0 12px;                 /* 关键：让背景盖住线 */
+  background-color: #0f172a;        /* 关键：遮住光线 */
+  background-image: linear-gradient(to right, #6366f1, #f472b6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  overflow: hidden;
+  border-right: .15em solid #6366f1;
+  white-space: nowrap;
+  letter-spacing: -1px;
+
+  animation:
+    typing 3.5s steps(30, end),
+    blink-caret .75s step-end infinite;
 }
 
-.header-line {
-    height: 2px;
-    width: 100px;     /* 线条变短一点 */
-    background: linear-gradient(90deg, transparent, #6366f1, transparent);
-    margin: 5px auto 0; /* 紧贴 Welcome 底部 */
+/* 花朵同样在上层 */
+.welcome-container .flower-pop {
+  position: relative;
+  z-index: 1;
+  font-size: 2.2rem;
+  line-height: 1;
+  background-color: #0f172a;  /* 盖住线 */
+  padding: 0 6px;
 }
 
-/* 绽放动画关键帧 */
-@keyframes bloom {
-    0% {
-        opacity: 0;
-        transform: scale(0) rotate(-45deg);
-    }
-    60% {
-        transform: scale(1.4) rotate(10deg); /* 弹跳效果：先放大一点 */
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1) rotate(0deg); /* 回到正常大小 */
-    }
+/* 动画 */
+@keyframes line-expand {
+  from { transform: translateY(-50%) scaleX(0); }
+  to   { transform: translateY(-50%) scaleX(1); }
 }
 
-/* 给 Welcome 字体加点可爱的渐变色（可选） */
-.typing-text {
-    font-family: 'Itim', cursive; /* 使用你喜欢的可爱字体 */
-    background: linear-gradient(to right, #6366f1, #f472b6);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    display: inline-block;
-}
-.typing-text {
-    font-size: 3.5rem;
-    color: #f8fafc;
-    font-weight: 800;
-    margin: 0;
-    display: inline-block;
-    overflow: hidden; /* 保证文字隐藏 */
-    border-right: .15em solid #6366f1; /* 光标效果 */
-    white-space: nowrap; /* 保证不换行 */
-    letter-spacing: -1px;
-    /* 动画：打字效果持续3秒，光标闪烁持续0.75秒 */
-    animation: 
-        typing 3.5s steps(30, end),
-        blink-caret .75s step-end infinite;
+@keyframes typing {
+  from { width: 0; }
+  to   { width: 100%; }
 }
 
-/* 装饰线条动画 */
-.header-line {
-    height: 4px;
-    width: 0;
-    background: linear-gradient(90deg, transparent, #6366f1, transparent);
-    margin: 10px auto 0;
-    animation: line-expand 2s ease-out forwards;
-    animation-delay: 1s;
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: #6366f1; }
 }
 
 /* --- 2. 放大 I'm Ruirui 卡片 --- */
@@ -458,18 +448,7 @@ a:hover {
     100% { transform: translate(30px, 50px) rotate(360deg); opacity: 0; }
 }
 
-/* --- 1. 修复视频过高的问题 --- */
-.video-card {
-    height: 450px;       /* 给大屏幕设置一个合适的最大高度 */
-    overflow: hidden;
-}
 
-.project-video {
-    width: 100%;
-    height: 100%;
-    object-fit: contain; /* 改为 contain 确保视频比例不失真且完整显示 */
-    background: #000;    /* 视频背景填黑，防止白边难看 */
-}
 
 /* --- 2. 核心：适配手机端 (屏幕宽度小于 768px) --- */
 @media (max-width: 768px) {
@@ -508,3 +487,82 @@ a:hover {
         min-height: auto;
     }
 }
+/* =========================
+   ALIGN: make hero card and video same height
+   Paste at END of CSS
+   ========================= */
+
+:root{
+  --top-card-h: 300px;    /* 你想更矮：280px；更高：320px */
+}
+
+/* 左上：hero card 给一个真实高度 */
+.hero-text-section{
+  position: static !important;
+  top: auto !important;
+  transform: none !important;
+
+  height: var(--top-card-h);
+  padding: 22px;
+  margin: 0;              /* 不用负 margin */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* 右上：video card 同高度 */
+.video-card{
+  height: var(--top-card-h) !important;
+}
+
+/* 视频铺满（你想高级感/填满就用 cover） */
+.project-video{
+  object-fit: cover !important;
+}
+
+/* 底部三卡片往上贴一点，让整体更齐 */
+.bottom-grid{
+  margin-top: 14px;
+}
+
+/* 左侧列间距也稍微收紧，避免左边显得“拖沓” */
+.left-column,
+.right-column{
+  gap: 18px;
+}
+
+/* 手机端单独处理：上方卡片不要太高 */
+@media (max-width: 900px){
+  :root{ --top-card-h: 240px; }
+}
+
+/* =========================
+   Align top edges + rebalance widths
+   Paste at END of CSS
+   ========================= */
+
+/* 1) 让左右两列的“顶边”按容器对齐 */
+.container{
+  align-items: flex-start;   /* 关键：两列从顶部对齐 */
+}
+
+/* 2) 左边稍微宽一点，右边稍微窄一点 */
+.left-column{ flex: 1.15 !important; }
+.right-column{ flex: 1.85 !important; }  /* 原来是 1 : 2，这里更平衡 */
+
+/* 3) 去掉 hero 区域任何“上移/负间距”带来的错位 */
+.hero-text-section{
+  position: static !important;
+  top: auto !important;
+  transform: none !important;
+
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* 4) 如果你的 h2 标题/教育块自带上外边距，统一压平，避免左边整体往下掉 */
+.floating-name{ margin-top: 0 !important; }
+.education-info{ margin-top: 0 !important; }
+
+/* 5) 右边视频卡片确保没有额外上外边距 */
+.video-card{ margin-top: 0 !important; }
