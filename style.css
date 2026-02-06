@@ -1,0 +1,459 @@
+/* 1. 全局基础设置 */
+body {
+    background-color: #0f172a; /* 极深蓝灰色 */
+    color: #e2e8f0; /* 浅灰色文字，保护视力 */
+    background-image: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%); /* 渐变底色，防止背景死板 */
+}
+
+
+/* 2. 核心布局容器 */
+.container {
+    max-width: 1100px;
+    margin: 40px auto;
+    display: flex;         /* 开启左右分栏模式 */
+    gap: 25px;
+}
+
+/* 左栏：关于我 + 照片 */
+.left-column {
+    flex: 1;               /* 占 1 份宽度 */
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* 右栏：视频 + 下方三个小卡片 */
+.right-column {
+    flex: 2;               /* 占 2 份宽度，给视频展示更多空间 */
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* 3. 通用卡片样式 */
+.card {
+    background: rgba(30, 41, 59, 0.7); /* 半透明背景 */
+    backdrop-filter: blur(12px); /* 核心：毛玻璃模糊效果 */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* 极其细微的白边 */
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* 4. 特殊卡片细节 */
+/* 1. 整体上移 */
+.hero-text-section {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+
+    /* 核心修改：用 position 配合 top 来实现精准位移 */
+    position: relative;
+    top: -500px; /* 向上平移 120 像素，如果不够可以继续加大 */
+    
+    /* 备选方案（如果 top 还不动，就用下面这一行） */
+    transform: translateY(-520px); 
+    
+    padding: 0;
+    margin-bottom: -80px; /* 抵消位移产生的底部空白 */
+}
+
+/* 2. 教育背景排版 */
+.education-info {
+    margin-top: -30px;
+    border-left: 3px solid rgba(255, 255, 255, 0.1); /* 极细的装饰线 */
+    padding-left: 15px;
+    margin-bottom: 20px;
+    margin-left: 10;
+}
+
+.degree {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #f8fafc;
+}
+
+.school-line {
+    display: block;
+    font-size: 0.8rem;
+    color: #94a3b8; /* 稍淡的颜色，突出层次 */
+    margin-top: 2px;
+}
+
+/* 3. 联系方式：去掉阴影框 */
+.contact-group-clean {
+    margin-top: -20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.clean-link {
+   
+    text-decoration: none;
+    color: #94a3b8; /* 灰蓝色，显得冷静专业 */
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.clean-link:hover {
+    color: #f472b6; /* 悬停时变成可爱的粉紫色 */
+    transform: translateX(5px); /* 悬停时向右滑一点，很有灵动感 */
+}
+
+.emoji-icon {
+    font-size: 1rem;
+}
+
+/* 名字字体稍微收一点 */
+.floating-name {
+    font-size: 2.2rem;
+    font-family: 'Itim', cursive;
+    margin-bottom: 12px;
+    display: inline-block;
+    
+    /* 文字颜色：高级流沙渐变 */
+    background: linear-gradient(120deg, #a78bfa 0%, #f472b6 50%, #818cf8 100%);
+    background-size: 200% auto; /* 为了让渐变动起来 */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+    /* 特效：给文字加一个淡淡的发光阴影 */
+    filter: drop-shadow(0 0 10px rgba(167, 139, 250, 0.3));
+    
+    /* 动画：让文字颜色缓缓流动 */
+    animation: shine 4s linear infinite;
+}
+@keyframes shine {
+    to { background-position: 200% center; }
+}
+
+
+.hero-card h1 { margin-top: 0; }
+
+.photo-card-mini {
+    padding: 0 !important;   /* 照片占满 */
+    overflow: hidden;
+    height: 350px;           /* 给照片一个固定高度 */
+}
+
+.profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;       /* 核心：照片填满不拉伸 */
+    display: block;
+}
+
+.video-card {
+    position: relative;
+    background: #000; /* 视频加载前显示黑色 */
+    border-radius: 20px;
+    overflow: hidden;
+    height: 100%; /* 确保填满右侧上半部分 */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.project-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 核心：让视频填满框，不留黑边 */
+    filter: brightness(0.9) contrast(1.1); /* 稍微压低亮度，增加对比度，看起来更高级 */
+    transition: filter 0.3s ease;
+}
+/* 鼠标悬停时视频变亮 */
+.video-card:hover .project-video {
+    filter: brightness(1);
+}
+
+/* 视频上方的文字浮层 */
+.video-overlay {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px); /* 磨砂玻璃效果 */
+    color: white;
+    padding: 6px 12px;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 模拟“正在录制/播放”的小红点 */
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #ff4d4d;
+    border-radius: 50%;
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+/* --- 1. 底栏容器：确保三栏平齐 --- */
+/* --- 1. 底栏布局 --- */
+.bottom-grid {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+/* --- 2. 小卡片容器 --- */
+.mini-card {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 18px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.mini-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(-8px);
+    border-color: rgba(244, 114, 182, 0.4); /* 悬停时边框微亮 */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* --- 3. 渐变标题 --- */
+.mini-card h3 {
+    font-family: 'Itim', cursive;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(120deg, #f472b6, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* --- 4. 酷炫链接样式 (胶囊感) --- */
+.mini-card a {
+    text-decoration: none;
+    display: inline-block; /* 改为 inline-block 让背景包住文字 */
+    margin-bottom: 10px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: #cbd5e1; /* 默认灰白色 */
+    background: rgba(255, 255, 255, 0.05); /* 淡淡的底色 */
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+    width: fit-content; /* 宽度随文字 */
+}
+
+/* 核心：悬停时的“变色”特效 */
+.mini-card a:hover {
+    color: #fff;
+    background: linear-gradient(120deg, rgba(244, 114, 182, 0.2), rgba(129, 140, 248, 0.2));
+    border-color: rgba(244, 114, 182, 0.5);
+    transform: scale(1.05) translateX(5px); /* 稍微放大并右移 */
+    box-shadow: 0 4px 12px rgba(244, 114, 182, 0.2);
+}
+
+/* 在链接前面加个精致的小箭头符号 */
+.mini-card a::before {
+    content: "→";
+    margin-right: 6px;
+    font-size: 0.9rem;
+    color: #818cf8;
+    transition: all 0.3s ease;
+}
+
+.mini-card a:hover::before {
+    color: #f472b6;
+    margin-right: 10px; /* 箭头跳动感 */
+}
+
+
+
+/* 6. 装饰性样式（标签和链接） */
+.quick-tags {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.quick-tags span {
+    background: rgba(255, 255, 255, 0.3);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+a {
+    color: #38bdf8;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+a:hover {
+    color: #7dd3fc;
+    text-shadow: 0 0 8px rgba(56, 189, 248, 0.5); /* 悬浮发光效果 */
+}
+
+/* 7. 移动端适配 */
+@media (max-width: 900px) {
+    .container {
+        flex-direction: column; /* 手机端变回垂直排列 */
+    }
+    .bottom-grid {
+        flex-direction: column;
+    }
+}
+
+/* --- 1. Header 与 Welcome 动画 --- */
+.main-header {
+    padding: 10px 0 5px; /* 极简内边距，进一步压缩高度 */
+    text-align: center;
+    min-height: auto;
+    margin-bottom: 20px; /* 控制 Header 和下方内容的总间距 */
+}
+
+.welcome-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* 文字和花朵的间距稍微收紧 */
+    line-height: 1; /* 【核心】消除文字默认的上下留白 */
+}
+
+.typing-text {
+    font-size: 2.2rem; /* 稍微缩小 Welcome，显得更精致 */
+    margin: 0;        /* 确保没有默认外边距 */
+    padding: 0;
+    line-height: 1.1;
+    /* ... 保持你之前的打字动画和渐变效果 ... */
+}
+
+.flower-pop {
+    font-size: 2.2rem; /* 让花朵和文字一样大 */
+    line-height: 1;
+    /* ... 保持之前的绽放动画 ... */
+}
+
+.header-line {
+    height: 2px;
+    width: 100px;     /* 线条变短一点 */
+    background: linear-gradient(90deg, transparent, #6366f1, transparent);
+    margin: 5px auto 0; /* 紧贴 Welcome 底部 */
+}
+
+/* 绽放动画关键帧 */
+@keyframes bloom {
+    0% {
+        opacity: 0;
+        transform: scale(0) rotate(-45deg);
+    }
+    60% {
+        transform: scale(1.4) rotate(10deg); /* 弹跳效果：先放大一点 */
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg); /* 回到正常大小 */
+    }
+}
+
+/* 给 Welcome 字体加点可爱的渐变色（可选） */
+.typing-text {
+    font-family: 'Itim', cursive; /* 使用你喜欢的可爱字体 */
+    background: linear-gradient(to right, #6366f1, #f472b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+.typing-text {
+    font-size: 3.5rem;
+    color: #f8fafc;
+    font-weight: 800;
+    margin: 0;
+    display: inline-block;
+    overflow: hidden; /* 保证文字隐藏 */
+    border-right: .15em solid #6366f1; /* 光标效果 */
+    white-space: nowrap; /* 保证不换行 */
+    letter-spacing: -1px;
+    /* 动画：打字效果持续3秒，光标闪烁持续0.75秒 */
+    animation: 
+        typing 3.5s steps(30, end),
+        blink-caret .75s step-end infinite;
+}
+
+/* 装饰线条动画 */
+.header-line {
+    height: 4px;
+    width: 0;
+    background: linear-gradient(90deg, transparent, #6366f1, transparent);
+    margin: 10px auto 0;
+    animation: line-expand 2s ease-out forwards;
+    animation-delay: 1s;
+}
+
+/* --- 2. 放大 I'm Ruirui 卡片 --- */
+.featured-card {
+    flex: 1.5 !important; /* 让它在 left-column 里占更多垂直空间 */
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%) !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* 文字居中 */
+    padding: 40px !important; /* 增加内边距显大气 */
+}
+
+.featured-card h2 {
+    font-size: 2.2rem !important;
+    margin-bottom: 15px;
+}
+
+.university-info {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+/* --- 动画关键帧 --- */
+@keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: #6366f1; }
+}
+
+@keyframes line-expand {
+    from { width: 0; }
+    to { width: 200px; }
+}
+
+.flower-pop::after, .flower-pop::before {
+    content: '🌸';
+    position: absolute;
+    font-size: 1.5rem;
+    opacity: 0;
+    z-index: -1;
+}
+
+.flower-pop:hover::after {
+    animation: petal-fall 1.5s ease-out;
+}
+
+@keyframes petal-fall {
+    0% { transform: translate(0, 0) rotate(0); opacity: 1; }
+    100% { transform: translate(30px, 50px) rotate(360deg); opacity: 0; }
+}
